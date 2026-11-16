@@ -412,6 +412,14 @@ class Lobby:
 
         return self.lobby_id
 
+    def get_local_peer_id(self):
+        if not self.game_started:
+            raise RuntimeError("The lobby has not reached agreement yet.")
+
+        participants = sorted(self.start_vote)
+
+        return participants.index(self.lobby_peer_id.hex()) + 1
+
 
     def stop(self):
         if not self.running:
