@@ -1,0 +1,222 @@
+{
+  "age_cards": {
+    "1": [
+      {
+        "name": "Clay Pit",
+        "color": "BROWN",
+        "cost": {"coins": 1, "resources": {}},
+        "effect": "Produces 1 of Ore or Clay. Choose each time it is used.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Clay Pool",
+        "color": "BROWN",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Produces 1 Clay.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Excavation",
+        "color": "BROWN",
+        "cost": {"coins": 1, "resources": {}},
+        "effect": "Produces 1 of Stone or Clay. Choose each time it is used.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Forest Cave",
+        "color": "BROWN",
+        "cost": {"coins": 1, "resources": {}},
+        "effect": "Produces 1 of Wood or Ore. Choose each time it is used.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Lumber Yard",
+        "color": "BROWN",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Produces 1 Wood.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Mine",
+        "color": "BROWN",
+        "cost": {"coins": 1, "resources": {}},
+        "effect": "Produces 1 of Stone or Ore. Choose each time it is used.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Ore Vein",
+        "color": "BROWN",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Produces 1 Ore.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Stone Pit",
+        "color": "BROWN",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Produces 1 Stone.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Timber Yard",
+        "color": "BROWN",
+        "cost": {"coins": 1, "resources": {}},
+        "effect": "Produces 1 of Wood or Stone. Choose each time it is used.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Tree Farm",
+        "color": "BROWN",
+        "cost": {"coins": 1, "resources": {}},
+        "effect": "Produces 1 of Wood or Clay. Choose each time it is used.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Glassworks",
+        "color": "GREY",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Produces 1 Glass.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Loom",
+        "color": "GREY",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Produces 1 Textile.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Press",
+        "color": "GREY",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Produces 1 Papyrus.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "East Trading Post",
+        "color": "YELLOW",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Buy Wood, Ore, Stone, or Clay from your right neighbor for 1 coin each instead of 2.",
+        "chain_from": [],
+        "chain_to": ["Forum"]
+      },
+      {
+        "name": "Marketplace",
+        "color": "YELLOW",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Buy Glass, Papyrus, or Textile from either neighbor for 1 coin each instead of 2.",
+        "chain_from": [],
+        "chain_to": ["Caravansery"]
+      },
+      {
+        "name": "Tavern",
+        "color": "YELLOW",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Gain 5 coins immediately.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "West Trading Post",
+        "color": "YELLOW",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Buy Wood, Ore, Stone, or Clay from your left neighbor for 1 coin each instead of 2.",
+        "chain_from": [],
+        "chain_to": ["Forum"]
+      },
+      {
+        "name": "Altar",
+        "color": "BLUE",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Gain 2 Victory Points.",
+        "chain_from": [],
+        "chain_to": ["Temple"]
+      },
+      {
+        "name": "Baths",
+        "color": "BLUE",
+        "cost": {"coins": 0, "resources": {"STONE": 1}},
+        "effect": "Gain 3 Victory Points.",
+        "chain_from": [],
+        "chain_to": ["Aqueduct"]
+      },
+      {
+        "name": "Pawnshop",
+        "color": "BLUE",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Gain 3 Victory Points.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Theater",
+        "color": "BLUE",
+        "cost": {"coins": 0, "resources": {}},
+        "effect": "Gain 2 Victory Points.",
+        "chain_from": [],
+        "chain_to": ["Statue"]
+      },
+      {
+        "name": "Apothecary",
+        "color": "GREEN",
+        "cost": {"coins": 0, "resources": {"TEXTILE": 1}},
+        "effect": "Science symbol: Compass.",
+        "chain_from": [],
+        "chain_to": ["Stables", "Dispensary"]
+      },
+      {
+        "name": "Scriptorium",
+        "color": "GREEN",
+        "cost": {"coins": 0, "resources": {"PAPYRUS": 1}},
+        "effect": "Science symbol: Tablet.",
+        "chain_from": [],
+        "chain_to": ["Courthouse", "Library"]
+      },
+      {
+        "name": "Workshop",
+        "color": "GREEN",
+        "cost": {"coins": 0, "resources": {"GLASS": 1}},
+        "effect": "Science symbol: Gear.",
+        "chain_from": [],
+        "chain_to": ["Archery Range", "Laboratory"]
+      },
+      {
+        "name": "Barracks",
+        "color": "RED",
+        "cost": {"coins": 0, "resources": {"ORE": 1}},
+        "effect": "Provides 1 Military Shield.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Guard Tower",
+        "color": "RED",
+        "cost": {"coins": 0, "resources": {"CLAY": 1}},
+        "effect": "Provides 1 Military Shield.",
+        "chain_from": [],
+        "chain_to": []
+      },
+      {
+        "name": "Stockade",
+        "color": "RED",
+        "cost": {"coins": 0, "resources": {"WOOD": 1}},
+        "effect": "Provides 1 Military Shield.",
+        "chain_from": [],
+        "chain_to": []
+      }
+    ]
+  }
+}

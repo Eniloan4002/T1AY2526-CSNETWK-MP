@@ -420,7 +420,6 @@ class Lobby:
 
         return participants.index(self.lobby_peer_id.hex()) + 1
 
-
     def stop(self):
         if not self.running:
             return
