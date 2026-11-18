@@ -236,6 +236,18 @@ class UDPTransport:
                         else:
                             print("Message received:", message.payload)
 
+                else:
+                    print(
+                        "REJECTED PACKET:",
+                        "| Local Player:", self.local_peer_id,
+                        "| Sender:", packet.sender_peer_id,
+                        "| Received Address:", address,
+                        "| Expected Address:",
+                        peer["address"] if peer else "Unknown peer",
+                        "| Received Session:", packet.session_id,
+                        "| Expected Session:", self.session_id
+                    )
+
             except socket.timeout:
                 pass
 

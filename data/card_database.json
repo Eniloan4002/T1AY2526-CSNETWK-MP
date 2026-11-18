@@ -1,110 +1,124 @@
 {
   "age_cards": {
     "1": [
-      {
-        "name": "Clay Pit",
-        "color": "BROWN",
-        "cost": {"coins": 1, "resources": {}},
-        "effect": "Produces 1 of Ore or Clay. Choose each time it is used.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Clay Pool",
-        "color": "BROWN",
-        "cost": {"coins": 0, "resources": {}},
-        "effect": "Produces 1 Clay.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Excavation",
-        "color": "BROWN",
-        "cost": {"coins": 1, "resources": {}},
-        "effect": "Produces 1 of Stone or Clay. Choose each time it is used.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Forest Cave",
-        "color": "BROWN",
-        "cost": {"coins": 1, "resources": {}},
-        "effect": "Produces 1 of Wood or Ore. Choose each time it is used.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Lumber Yard",
-        "color": "BROWN",
-        "cost": {"coins": 0, "resources": {}},
-        "effect": "Produces 1 Wood.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Mine",
-        "color": "BROWN",
-        "cost": {"coins": 1, "resources": {}},
-        "effect": "Produces 1 of Stone or Ore. Choose each time it is used.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Ore Vein",
-        "color": "BROWN",
-        "cost": {"coins": 0, "resources": {}},
-        "effect": "Produces 1 Ore.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Stone Pit",
-        "color": "BROWN",
-        "cost": {"coins": 0, "resources": {}},
-        "effect": "Produces 1 Stone.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Timber Yard",
-        "color": "BROWN",
-        "cost": {"coins": 1, "resources": {}},
-        "effect": "Produces 1 of Wood or Stone. Choose each time it is used.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Tree Farm",
-        "color": "BROWN",
-        "cost": {"coins": 1, "resources": {}},
-        "effect": "Produces 1 of Wood or Clay. Choose each time it is used.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Glassworks",
-        "color": "GREY",
-        "cost": {"coins": 0, "resources": {}},
-        "effect": "Produces 1 Glass.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Loom",
-        "color": "GREY",
-        "cost": {"coins": 0, "resources": {}},
-        "effect": "Produces 1 Textile.",
-        "chain_from": [],
-        "chain_to": []
-      },
-      {
-        "name": "Press",
-        "color": "GREY",
-        "cost": {"coins": 0, "resources": {}},
-        "effect": "Produces 1 Papyrus.",
-        "chain_from": [],
-        "chain_to": []
-      },
+    {
+      "name": "Clay Pit",
+      "color": "BROWN",
+      "cost": {"coins": 1, "resources": {}},
+      "production": {"choices": [["ORE"], ["CLAY"]]},
+      "effect": "Produces 1 of Ore or Clay. Choose each time it is used.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Clay Pool",
+      "color": "BROWN",
+      "cost": {"coins": 0, "resources": {}},
+      "production": {"fixed": {"CLAY": 1}},
+      "effect": "Produces 1 Clay.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Excavation",
+      "color": "BROWN",
+      "cost": {"coins": 1, "resources": {}},
+      "production": {"choices": [["STONE"], ["CLAY"]]},
+      "effect": "Produces 1 of Stone or Clay. Choose each time it is used.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Forest Cave",
+      "color": "BROWN",
+      "cost": {"coins": 1, "resources": {}},
+      "production": {"choices": [["WOOD"], ["ORE"]]},
+      "effect": "Produces 1 of Wood or Ore. Choose each time it is used.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Lumber Yard",
+      "color": "BROWN",
+      "cost": {"coins": 0, "resources": {}},
+      "production": {"fixed": {"WOOD": 1}},
+      "effect": "Produces 1 Wood.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Mine",
+      "color": "BROWN",
+      "cost": {"coins": 1, "resources": {}},
+      "production": {"choices": [["STONE"], ["ORE"]]},
+      "effect": "Produces 1 of Stone or Ore. Choose each time it is used.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Ore Vein",
+      "color": "BROWN",
+      "cost": {"coins": 0, "resources": {}},
+      "production": {"fixed": {"ORE": 1}},
+      "effect": "Produces 1 Ore.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Stone Pit",
+      "color": "BROWN",
+      "cost": {"coins": 0, "resources": {}},
+      "production": {"fixed": {"STONE": 1}},
+      "effect": "Produces 1 Stone.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Timber Yard",
+      "color": "BROWN",
+      "cost": {"coins": 1, "resources": {}},
+      "production": {"choices": [["WOOD"], ["STONE"]]},
+      "effect": "Produces 1 of Wood or Stone. Choose each time it is used.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Tree Farm",
+      "color": "BROWN",
+      "cost": {"coins": 1, "resources": {}},
+      "production": {"choices": [["WOOD"], ["CLAY"]]},
+      "effect": "Produces 1 of Wood or Clay. Choose each time it is used.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Glassworks",
+      "color": "GREY",
+      "cost": {"coins": 0, "resources": {}},
+      "production": {"fixed": {"GLASS": 1}},
+      "effect": "Produces 1 Glass.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Loom",
+      "color": "GREY",
+      "cost": {"coins": 0, "resources": {}},
+      "production": {"fixed": {"TEXTILE": 1}},
+      "effect": "Produces 1 Textile.",
+      "chain_from": [],
+      "chain_to": []
+    },
+    {
+      "name": "Press",
+      "color": "GREY",
+      "cost": {"coins": 0, "resources": {}},
+      "production": {"fixed": {"PAPYRUS": 1}},
+      "effect": "Produces 1 Papyrus.",
+      "chain_from": [],
+      "chain_to": []
+    },
+
       {
         "name": "East Trading Post",
         "color": "YELLOW",

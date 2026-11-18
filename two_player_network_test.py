@@ -1,4 +1,3 @@
-
 import threading
 import time
 
@@ -19,6 +18,7 @@ from game.deterministic_setup import (
 from game.draft import create_card_commitment, verify_card_commitment
 from game.draft import create_card_reveal, verify_card_reveal
 from game.draft import DraftManager
+from game.game_state import GameState
 
 
 # Create three players, each with its own UDP socket.
@@ -164,6 +164,9 @@ if all(results):
                     "SUCCESS" if confirmation_results[i] else "FAILED"
                 )
 
+                print("\nGAME SETUP:")
+            print(setups[0])
+
             if all(confirmation_results):
                 print("\nSUCCESS! All players confirmed the same game setup.")
 
@@ -182,19 +185,77 @@ if all(results):
                     for i in range(3)
                 ]
 
-                # Register the draft message handlers.
+                # Assign each player their left and right neighbors.
+                for manager in draft_managers:
+                    peer_id = manager.local_peer_id
+
+                    manager.set_neighbors(
+                        setups[0]["neighbors"][peer_id]
+                    )
+
+                # Register callbacks to receive draft messages.
                 for manager in draft_managers:
                     manager.register_callbacks()
 
+                print("\n========== PRIVATE HAND TEST ==========")
+
+                # Generate the actual Age I deck using the shared seed.
+                age_decks = build_all_age_decks(
+                    seeds[0],
+                    len(active_players),
+                    setups[0]["guild_cards"]
+                )
+
+                age_one_deck = age_decks["age_one"]
+
+                # Assign each player their own seven-card hand.
+                for manager in draft_managers:
+                    peer_id = manager.local_peer_id
+
+                    seat = setups[0]["wonder_assignments"][peer_id]["seat"]
+
+                    hand = deal_hand(
+                        age_one_deck,
+                        seat,
+                        len(active_players)
+                    )
+
+                    manager.set_hand(hand)
+
+                # Display and check the assigned hands.
+                for manager in draft_managers:
+                    print(
+                        "Player", manager.local_peer_id,
+                        "| Seat:", setups[0]["wonder_assignments"][
+                            manager.local_peer_id
+                        ]["seat"],
+                        "| Hand:", manager.hand
+                    )
+
+                hands_are_different = (
+                    draft_managers[0].hand != draft_managers[1].hand
+                    and draft_managers[1].hand != draft_managers[2].hand
+                    and draft_managers[0].hand != draft_managers[2].hand
+                )
+
+                if hands_are_different:
+                    print("\nSUCCESS! Each player received a different starting hand.")
+                else:
+                    print("\nFAILED! Players received identical hands.")
+
                 # Give each player a different action.
                 draft_actions = [
-                    ("Lumber Yard", "BUILD"),
-                    ("Stone Pit", "WONDER_STAGE"),
-                    ("Clay Pool", "DISCARD")
+                    (draft_managers[0].hand[0], "BUILD"),
+                    (draft_managers[1].hand[0], "WONDER_STAGE"),
+                    (draft_managers[2].hand[0], "DISCARD")
                 ]
 
                 draft_results = [False, False, False]
                 draft_threads = []
+
+                # Prepare all players for the new draft turn.
+                for manager in draft_managers:
+                    manager.prepare_draft_turn()
 
                 # All players perform their draft turns simultaneously.
                 for i in range(3):
@@ -226,6 +287,302 @@ if all(results):
                     print("\nSUCCESS! All players completed the commit-reveal exchange.")
                 else:
                     print("\nDRAFT TEST FAILED.")
+
+                
+                if all(draft_results):
+                    print("\n========== PRIVATE HAND REMOVAL TEST ==========")
+
+                    for manager in draft_managers:
+                        print(
+                            "Player", manager.local_peer_id,
+                            "| Remaining cards:", len(manager.hand),
+                            "| Hand:", manager.hand
+                        )
+
+                    if all(len(manager.hand) == 6 for manager in draft_managers):
+                        print("\nSUCCESS! All players now have 6 cards.")
+                    else:
+                        print("\nFAILED! Some players have an incorrect hand size.")
+
+                if all(draft_results):
+                    print("\n========== HAND PASS TEST ==========")
+
+                    hand_pass_results = [False, False, False]
+                    hand_pass_threads = []
+
+                    # Prepare all players before anyone sends a hand.
+                    for manager in draft_managers:
+                        manager.prepare_hand_pass(
+                            age=1,
+                            turn=1
+                        )
+
+                    # All players pass their remaining hands simultaneously.
+                    for i in range(3):
+                        thread = threading.Thread(
+                            target=lambda index=i:
+                                hand_pass_results.__setitem__(
+                                    index,
+                                    draft_managers[index].pass_hand(
+                                        age=1,
+                                        turn=1
+                                    )
+                                )
+                        )
+
+                        hand_pass_threads.append(thread)
+                        thread.start()
+
+                    for thread in hand_pass_threads:
+                        thread.join()
+
+                    print("\nHAND PASS RESULTS:")
+
+                    for i in range(3):
+                        print(
+                            f"Player {i + 1}:",
+                            "SUCCESS" if hand_pass_results[i] else "FAILED",
+                            "| Hand:", draft_managers[i].hand
+                        )
+
+                    if all(hand_pass_results):
+                        print("\nSUCCESS! All players exchanged hands.")
+
+                        if all(
+                            len(manager.hand) == 6
+                            for manager in draft_managers
+                        ):
+                            print("SUCCESS! All players still have 6 cards.")
+                        else:
+                            print("FAILED! Incorrect hand sizes after passing.")
+                    else:
+                        print("\nHAND PASS FAILED.")
+
+                
+                if all(draft_results):
+                    print("\n========== COMPLETE SIX-TURN DRAFT TEST ==========")
+
+                    # Give everyone a fresh seven-card starting hand.
+                    for manager in draft_managers:
+                        peer_id = manager.local_peer_id
+                        seat = setups[0]["wonder_assignments"][peer_id]["seat"]
+
+                        hand = deal_hand(
+                            age_one_deck,
+                            seat,
+                            len(active_players)
+                        )
+
+                        manager.set_hand(hand)
+
+                    six_turn_results = []
+
+                    # Simulate all six turns.
+                    for turn in range(1, 7):
+                        print("\n========== TURN", turn, "==========")
+
+                        turn_results = [False, False, False]
+                        turn_threads = []
+
+                        # Prepare every player before starting.
+                        for manager in draft_managers:
+                            manager.prepare_draft_turn()
+
+                        # Each player chooses the first card in their hand.
+                        for i in range(3):
+                            thread = threading.Thread(
+                                target=lambda index=i:
+                                    turn_results.__setitem__(
+                                        index,
+                                        draft_managers[index].run_turn(
+                                            draft_managers[index].hand[0],
+                                            "DISCARD"
+                                        )
+                                    )
+                            )
+
+                            turn_threads.append(thread)
+                            thread.start()
+
+                        for thread in turn_threads:
+                            thread.join()
+
+                        if not all(turn_results):
+                            print("TURN", turn, "FAILED during draft.")
+                            six_turn_results.append(False)
+                            break
+
+                        print("All players completed Turn", turn, ".")
+
+                        # Prepare everyone to receive the next hand.
+                        hand_pass_results = [False, False, False]
+                        hand_pass_threads = []
+
+                        for manager in draft_managers:
+                            manager.prepare_hand_pass(
+                                age=1,
+                                turn=turn
+                            )
+
+                        # All players pass their hands simultaneously.
+                        for i in range(3):
+                            thread = threading.Thread(
+                                target=lambda index=i:
+                                    hand_pass_results.__setitem__(
+                                        index,
+                                        draft_managers[index].pass_hand(
+                                            age=1,
+                                            turn=turn
+                                        )
+                                    )
+                            )
+
+                            hand_pass_threads.append(thread)
+                            thread.start()
+
+                        for thread in hand_pass_threads:
+                            thread.join()
+
+                        if not all(hand_pass_results):
+                            print("TURN", turn, "FAILED during hand passing.")
+                            six_turn_results.append(False)
+                            break
+
+                        print("All players completed HAND_PASS for Turn", turn, ".")
+
+                        # Check the expected number of cards.
+                        if turn == 6:
+                            expected_cards = 0
+                        else:
+                            expected_cards = 7 - turn
+
+                        correct_hands = all(
+                            len(manager.hand) == expected_cards
+                            for manager in draft_managers
+                        )
+
+                        if correct_hands:
+                            print(
+                                "SUCCESS! All players have",
+                                expected_cards,
+                                "cards remaining."
+                            )
+                        else:
+                            print("FAILED! Incorrect hand sizes.")
+                            six_turn_results.append(False)
+                            break
+
+                        six_turn_results.append(True)
+
+                    print("\n========== SIX-TURN RESULTS ==========")
+
+                    for turn, success in enumerate(six_turn_results, start=1):
+                        print(
+                            "Turn", turn,
+                            ":", "SUCCESS" if success else "FAILED"
+                        )
+
+                    if len(six_turn_results) == 6 and all(six_turn_results):
+                        print("\nSUCCESS! All players completed all six turns.")
+                    else:
+                        print("\nSIX-TURN DRAFT FAILED.")
+                
+                if all(draft_results):
+                    print("\n========== DRAFT + GAME STATE INTEGRATION ==========")
+
+                    # Give everyone fresh starting hands for the integration test.
+                    for manager in draft_managers:
+                        peer_id = manager.local_peer_id
+                        seat = setups[0]["wonder_assignments"][peer_id]["seat"]
+
+                        hand = deal_hand(
+                            age_one_deck,
+                            seat,
+                            len(active_players)
+                        )
+
+                        manager.set_hand(hand)
+                        
+                    game_players = [
+                        {
+                            "peer_id": peer_id,
+                            "seat": assignment["seat"],
+                            "wonder_board": assignment["wonder_board"],
+                            "wonder_side": assignment["wonder_side"]
+                        }
+                        for peer_id, assignment
+                        in setups[0]["wonder_assignments"].items()
+                    ]
+
+                    game_states = [
+                        GameState(game_players)
+                        for _ in range(3)
+                    ]
+
+                    integration_results = [False, False, False]
+                    integration_threads = []
+
+                    # Prepare all players for the new draft turn.
+                    for manager in draft_managers:
+                        manager.prepare_draft_turn()
+                    
+                    for i in range(3):
+                        thread = threading.Thread(
+                            target=lambda index=i:
+                                integration_results.__setitem__(
+                                    index,
+                                    draft_managers[index].run_turn_and_resolve(
+                                        game_states[index],
+                                        draft_managers[index].hand[0],
+                                        "DISCARD"
+                                    )
+                                )
+                        )
+
+                        integration_threads.append(thread)
+                        thread.start()
+
+                    for thread in integration_threads:
+                        thread.join()
+
+                    print("\nIntegration results:")
+
+                    for i in range(3):
+                        print(
+                            f"Player {i + 1}:",
+                            "SUCCESS" if integration_results[i] else "FAILED"
+                        )
+
+                    if all(integration_results):
+                        print("\nChecking game states...")
+
+                        for i, game_state in enumerate(game_states):
+                            print(
+                                f"Peer {i + 1}:",
+                                [p.coins for p in game_state.players.values()],
+                                "| Log entries:",
+                                len(game_state.public_log)
+                            )
+
+                        states_match = all(
+                            game_states[0].players[peer_id].coins
+                            == game_states[1].players[peer_id].coins
+                            == game_states[2].players[peer_id].coins
+                            for peer_id in [1, 2, 3]
+                        )
+
+                        logs_match = (
+                            game_states[0].public_log
+                            == game_states[1].public_log
+                            == game_states[2].public_log
+                        )
+
+                        if states_match and logs_match:
+                            print("\nSUCCESS! All peers have identical game states.")
+                        else:
+                            print("\nFAILED! Game states do not match.")
+                    else:
+                        print("\nDRAFT + GAME STATE INTEGRATION FAILED.")
 
             else:
                 print("\nRING CONFIRMATION FAILED.")

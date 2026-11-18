@@ -1,0 +1,115 @@
+
+{
+  "Alexandria": {
+    "A": {
+      "stages": [
+        {"cost": {"STONE": 2}, "reward": {"vp": 3}},
+        {"cost": {"ORE": 2}, "reward": {"special": "flexible_raw_production"}},
+        {"cost": {"GLASS": 2}, "reward": {"vp": 7}}
+      ]
+    },
+    "B": {
+      "stages": [
+        {"cost": {"CLAY": 2}, "reward": {"special": "flexible_raw_production"}},
+        {"cost": {"WOOD": 2}, "reward": {"special": "flexible_manufactured_production"}},
+        {"cost": {"STONE": 3}, "reward": {"vp": 7}}
+      ]
+    }
+  },
+  "Babylon": {
+    "A": {
+      "stages": [
+        {"cost": {"CLAY": 2}, "reward": {"vp": 3}},
+        {"cost": {"WOOD": 3}, "reward": {"special": "science_choice"}},
+        {"cost": {"CLAY": 4}, "reward": {"vp": 7}}
+      ]
+    },
+    "B": {
+      "stages": [
+        {"cost": {"CLAY": 1, "TEXTILE": 1}, "reward": {"vp": 3}},
+        {"cost": {"WOOD": 2, "GLASS": 1}, "reward": {"special": "free_build_once_per_age"}},
+        {"cost": {"CLAY": 3, "PAPYRUS": 1}, "reward": {"special": "science_choice"}}
+      ]
+    }
+  },
+  "Ephesos": {
+    "A": {
+      "stages": [
+        {"cost": {"STONE": 2}, "reward": {"vp": 3}},
+        {"cost": {"WOOD": 2}, "reward": {"coins": 9}},
+        {"cost": {"PAPYRUS": 2}, "reward": {"vp": 7}}
+      ]
+    },
+    "B": {
+      "stages": [
+        {"cost": {"STONE": 2}, "reward": {"vp": 2, "coins": 4}},
+        {"cost": {"WOOD": 2}, "reward": {"vp": 3, "coins": 4}},
+        {"cost": {"GLASS": 1, "PAPYRUS": 1, "TEXTILE": 1}, "reward": {"vp": 5, "coins": 4}}
+      ]
+    }
+  },
+  "Giza": {
+    "A": {
+      "stages": [
+        {"cost": {"STONE": 2}, "reward": {"vp": 3}},
+        {"cost": {"WOOD": 3}, "reward": {"vp": 5}},
+        {"cost": {"STONE": 4}, "reward": {"vp": 7}}
+      ]
+    },
+    "B": {
+      "stages": [
+        {"cost": {"WOOD": 2}, "reward": {"vp": 3}},
+        {"cost": {"STONE": 3}, "reward": {"vp": 5}},
+        {"cost": {"CLAY": 3}, "reward": {"vp": 5}},
+        {"cost": {"STONE": 4, "PAPYRUS": 1}, "reward": {"vp": 7}}
+      ]
+    }
+  },
+  "Halikarnassus": {
+    "A": {
+      "stages": [
+        {"cost": {"CLAY": 2}, "reward": {"vp": 3}},
+        {"cost": {"ORE": 3}, "reward": {"special": "discard_pile_build"}},
+        {"cost": {"TEXTILE": 2}, "reward": {"vp": 7}}
+      ]
+    },
+    "B": {
+      "stages": [
+        {"cost": {"ORE": 2}, "reward": {"vp": 2, "special": "discard_pile_build"}},
+        {"cost": {"CLAY": 3}, "reward": {"vp": 1, "special": "discard_pile_build"}},
+        {"cost": {"GLASS": 1, "PAPYRUS": 1, "TEXTILE": 1}, "reward": {"special": "discard_pile_build"}}
+      ]
+    }
+  },
+  "Olympia": {
+    "A": {
+      "stages": [
+        {"cost": {"WOOD": 2}, "reward": {"vp": 3}},
+        {"cost": {"STONE": 2}, "reward": {"special": "free_build_once_per_age"}},
+        {"cost": {"ORE": 2}, "reward": {"vp": 7}}
+      ]
+    },
+    "B": {
+      "stages": [
+        {"cost": {"WOOD": 2}, "reward": {"special": "trading_discount"}},
+        {"cost": {"STONE": 2}, "reward": {"vp": 5}},
+        {"cost": {"ORE": 2, "TEXTILE": 1}, "reward": {"special": "copy_neighbor_guild"}}
+      ]
+    }
+  },
+  "Rhodes": {
+    "A": {
+      "stages": [
+        {"cost": {"WOOD": 2}, "reward": {"vp": 3}},
+        {"cost": {"CLAY": 3}, "reward": {"shields": 2}},
+        {"cost": {"ORE": 4}, "reward": {"vp": 7}}
+      ]
+    },
+    "B": {
+      "stages": [
+        {"cost": {"STONE": 3}, "reward": {"vp": 3, "shields": 1, "coins": 3}},
+        {"cost": {"ORE": 4}, "reward": {"vp": 4, "shields": 1, "coins": 4}}
+      ]
+    }
+  }
+}
