@@ -22,6 +22,40 @@ game_players = [
     }
 ]
 
+# Olympia Side B first stage discount.
+players = [
+    {
+        "peer_id": "P1",
+        "seat": 0,
+        "wonder_board": "Olympia",
+        "wonder_side": "B"
+    },
+    {
+        "peer_id": "P2",
+        "seat": 1,
+        "wonder_board": "Giza",
+        "wonder_side": "A"
+    },
+    {
+        "peer_id": "P3",
+        "seat": 2,
+        "wonder_board": "Rhodes",
+        "wonder_side": "A"
+    }
+]
+
+game = GameState(players)
+
+# Before completing the first stage, the price is 2.
+assert game.get_resource_price("P1", "P2", "WOOD") == 2
+
+# After completing the first stage, the price becomes 1.
+game.get_player("P1").wonder_stages = 1
+
+assert game.get_resource_price("P1", "P2", "WOOD") == 1
+assert game.get_resource_price("P1", "P3", "STONE") == 1
+
+print("SUCCESS! Olympia Side B resource discount works.")
 
 game = GameState(game_players)
 
@@ -392,3 +426,126 @@ try:
 
 except (ValueError, KeyError) as error:
     print("FAILED!", error)
+
+
+print("\n========== MULTIPLE RESOURCE PURCHASE TEST ==========")
+
+players = [
+    {
+        "peer_id": "P1",
+        "seat": 0,
+        "wonder_board": "Alexandria",
+        "wonder_side": "A"
+    },
+    {
+        "peer_id": "P2",
+        "seat": 1,
+        "wonder_board": "Giza",
+        "wonder_side": "A"
+    },
+    {
+        "peer_id": "P3",
+        "seat": 2,
+        "wonder_board": "Rhodes",
+        "wonder_side": "A"
+    }
+]
+
+game = GameState(players)
+
+buyer = game.get_player("P1")
+seller = game.get_player("P2")
+
+# Give the buyer enough coins.
+buyer.coins = 10
+
+# P2 produces 1 WOOD from Giza? No, use a card-independent
+# resource setup for this isolated purchase test.
+seller.resources["WOOD"] = 3
+
+print("Before purchase:")
+print("Buyer coins:", buyer.coins)
+print("Seller coins:", seller.coins)
+
+amount_paid = game.buy_resource(
+    "P1",
+    "P2",
+    "WOOD",
+    qty=3
+)
+
+print("\nAfter purchase:")
+print("Amount paid:", amount_paid)
+print("Buyer coins:", buyer.coins)
+print("Seller coins:", seller.coins)
+
+assert amount_paid == 6
+assert buyer.coins == 4
+assert seller.coins == 9
+
+print("SUCCESS! Multiple resource purchase works.")
+
+
+
+print("\n========== INVALID PURCHASE QUANTITY TESTS ==========")
+
+try:
+    game.buy_resource("P1", "P2", "WOOD", qty=0)
+    assert False, "Zero quantity should be rejected."
+except ValueError:
+    print("SUCCESS! Zero quantity was rejected.")
+
+try:
+    game.buy_resource("P1", "P2", "WOOD", qty=4)
+    assert False, "Unavailable quantity should be rejected."
+except ValueError:
+    print("SUCCESS! Unavailable quantity was rejected.")
+
+try:
+    game.buy_resource("P1", "P2", "WOOD", qty=-1)
+    assert False, "Negative quantity should be rejected."
+except ValueError:
+    print("SUCCESS! Negative quantity was rejected.")
+
+
+print("\n========== RESOURCE OFFER TEST ==========")
+
+offer = game.create_resource_offer(
+    "P1",
+    "P2",
+    "WOOD"
+)
+
+print("Offer:", offer)
+
+assert offer["resource"] == "WOOD"
+assert offer["qty_available"] == 3
+assert offer["price_per_unit"] == 2
+
+print("SUCCESS! Resource offer is correct.")
+
+
+print("\n========== RESOURCE OFFER DISCOUNT TEST ==========")
+
+# Get the actual players stored in this GameState.
+buyer = game.get_player("P1")
+seller = game.get_player("P3")
+
+# Give P1 the West Trading Post.
+buyer.built_cards.append({"name": "West Trading Post"})
+
+# Give P3 WOOD so it can sell the resource.
+seller.resources["WOOD"] = 1
+
+offer = game.create_resource_offer(
+    "P1",
+    "P3",
+    "WOOD"
+)
+
+print("Discounted offer:", offer)
+
+assert offer["qty_available"] == 1
+assert offer["price_per_unit"] == 1
+
+print("SUCCESS! Seller used the buyer's discount.")

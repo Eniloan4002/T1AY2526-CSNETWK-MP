@@ -139,7 +139,44 @@ class GameState:
                    for card in buyer.built_cards):
                 price = 1
 
+        # Olympia Wonder Side B, first stage discount.
+        if (resource in RAW_MATERIALS
+                and buyer.wonder_board == "Olympia"
+                and buyer.wonder_side == "B"
+                and buyer.wonder_stages >= 1):
+            price = 1
+
         return price
+
+    def create_resource_offer(self, buyer_id, seller_id, resource, choices=None):
+        buyer = self.get_player(buyer_id)
+        seller = self.get_player(seller_id)
+
+        if buyer is None or seller is None:
+            raise ValueError("Player does not exist.")
+
+        if resource not in RAW_MATERIALS + MANUFACTURED_GOODS:
+            raise ValueError("Invalid resource.")
+
+        # Check how many units the seller can produce.
+        seller_resources = self.calculate_resources(seller_id, choices)
+        qty_available = seller_resources.get(resource, 0)
+
+        if qty_available <= 0:
+            raise ValueError("Seller does not produce this resource.")
+
+        # The price depends on the BUYER's discounts.
+        price_per_unit = self.get_resource_price(
+            buyer_id,
+            seller_id,
+            resource
+        )
+
+        return {
+            "resource": resource,
+            "qty_available": qty_available,
+            "price_per_unit": price_per_unit
+        }
 
     
     
@@ -213,27 +250,35 @@ class GameState:
         }
     
     
-    def buy_resource(self, buyer_id, seller_id, resource, choices=None):
+
+    def buy_resource(self, buyer_id, seller_id, resource, choices=None, qty=1):
         buyer = self.get_player(buyer_id)
         seller = self.get_player(seller_id)
 
         if buyer is None or seller is None:
             raise ValueError("Player does not exist.")
 
+        if resource not in RAW_MATERIALS + MANUFACTURED_GOODS:
+            raise ValueError("Invalid resource.")
+
+        if not isinstance(qty, int) or qty <= 0:
+            raise ValueError("Quantity must be a positive integer.")
+
         seller_resources = self.calculate_resources(seller_id, choices)
 
-        if seller_resources.get(resource, 0) < 1:
-            raise ValueError("Neighbor does not produce this resource.")
+        if seller_resources.get(resource, 0) < qty:
+            raise ValueError("Neighbor does not produce enough resources.")
 
         price = self.get_resource_price(buyer_id, seller_id, resource)
+        total_cost = price * qty
 
-        if buyer.coins < price:
+        if buyer.coins < total_cost:
             raise ValueError("Not enough coins.")
 
-        buyer.coins -= price
-        seller.coins += price
+        buyer.coins -= total_cost
+        seller.coins += total_cost
 
-        return price
+        return total_cost
 
 
     def complete_wonder_stage(

@@ -1,4 +1,3 @@
-
 import argparse
 from networking.logger import MessageLogger
 

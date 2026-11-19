@@ -1,4 +1,3 @@
-
 from networking.reliability import ReliableChannel
 
 channel = ReliableChannel()

@@ -1,4 +1,3 @@
-
 from networking.udp import UDPTransport
 from networking.packet import Packet
 from networking.logger import MessageLogger

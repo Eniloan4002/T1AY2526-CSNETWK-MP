@@ -1,4 +1,3 @@
-
 from networking.udp import UDPTransport
 from networking.packet import Packet, FLAG_ACK
 from networking.reliability import ReliableChannel
